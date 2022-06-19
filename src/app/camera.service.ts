@@ -6,7 +6,7 @@ import { from, shareReplay } from 'rxjs';
 })
 export class CameraService {
   camera$ = from(
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   ).pipe(shareReplay());
   
   constructor() {}
