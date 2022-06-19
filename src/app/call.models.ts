@@ -1,9 +1,7 @@
-import { BehaviorSubject, filter, Subject } from 'rxjs';
 import { IncomingMessage, OutgoingMessage } from './comunications.models';
-import { ComunicationsService } from './comunications.service';
 import { User } from './users.models';
-import * as uuid from 'uuid';
 import { SignalingService } from './signaling.service';
+import { environment } from 'src/environments/environment';
 
 export interface IncomingRTCMessage extends IncomingMessage {}
 
@@ -43,7 +41,7 @@ export class Call {
     camera: MediaStream,
     private signaling: SignalingService
   ) {
-    this.peerConnection = new RTCPeerConnection();
+    this.peerConnection = new RTCPeerConnection(environment.peerConfig);
 
     //setup local stream
     camera
