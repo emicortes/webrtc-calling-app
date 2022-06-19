@@ -1,0 +1,19 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    max-height: calc(100% - 40px);
+}
+
+.end-call {
+    position: fixed;
+    padding: 8px;
+    background-color: red;
+    color: white;
+    border-radius: 8px;
+    bottom: 16px;
+    left: calc(50% - 32px);
+}
+app-stream-player {
+    height: calc(100vh - 56px);
+}

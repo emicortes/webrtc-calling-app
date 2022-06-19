@@ -1,0 +1,12 @@
+video {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  aspect-ratio: 16/9;
+}
+
+:host {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: gray;
+}

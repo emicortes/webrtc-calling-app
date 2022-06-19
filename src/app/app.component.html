@@ -1,18 +1,25 @@
 <app-login *ngIf="!(loggedAs$ | async)"></app-login>
 <ng-container *ngIf="loggedAs$ | async as userName">
-  <h1>Logged in as {{ userName }}</h1>
-  <ng-template #waitingCamera>
-    <h2>Waiting camera...</h2>
-  </ng-template>
-  <ng-container *ngIf="camera$ | async as cameraStream; else waitingCamera">
-    <app-user-directory *ngIf="!(currentCall$ | async)"> </app-user-directory>
-    <ng-container *ngIf="currentCall$ | async as currentCall">
-      <app-call [call]="currentCall"></app-call>
-    </ng-container>
-    <app-stream-player
-      [stream]="cameraStream"
-      [muted]="true"
-      class="my-video"
-    ></app-stream-player>
-  </ng-container>
+  <div class="app-shell">
+    <header>
+      <span class="app-title">Entrevero - Logged in as {{ userName }}</span>
+      <button class="signout" (click)="signout()">Signout</button>
+    </header>
+    <section class="main-content">
+      <ng-template #waitingCamera>
+        <h2>Waiting camera...</h2>
+      </ng-template>
+      <ng-container *ngIf="camera$ | async as cameraStream; else waitingCamera">
+        <app-user-directory *ngIf="!(currentCall$ | async)"> </app-user-directory>
+        <ng-container *ngIf="currentCall$ | async as currentCall">
+          <app-call [call]="currentCall"></app-call>
+        </ng-container>
+        <app-stream-player
+          [stream]="cameraStream"
+          [muted]="true"
+          class="my-video"
+        ></app-stream-player>
+      </ng-container>
+    </section>
+  </div>
 </ng-container>

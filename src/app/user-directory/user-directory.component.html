@@ -1,13 +1,21 @@
 <ng-container *ngIf="camera$ | async as cameraStream">
-  <ul *ngIf="users$ | async as users">
-    <li *ngFor="let user of users">
-      {{ user.name }} ({{ user.status }})
-      <button
-        *ngIf="user.status === 'Online'"
-        (click)="call(user, cameraStream)"
-      >
-        Call
-      </button>
-    </li>
-  </ul>
+  <ng-container *ngIf="users$ | async as users">
+    <ng-container *ngIf="!users.length">
+      <h2>There is no people to call now</h2>
+    </ng-container>
+    <ng-container *ngIf="users.length">
+      <h1>Pick an user to start a call</h1>
+      <ul>
+        <li *ngFor="let user of users">
+          {{ user.name }} ({{ user.status }})
+          <button
+            *ngIf="user.status === 'Online'"
+            (click)="call(user, cameraStream)"
+          >
+            Call
+          </button>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
 </ng-container>

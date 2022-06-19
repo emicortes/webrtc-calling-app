@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    font-family: 'Anek Latin', sans-serif;
+}
+
+button, input[type=submit] {
+    padding: 4px 8px;
+    border: 1px solid gray;
+    color: white;
+    background: black;
+    border-radius: 4px;
+    cursor: pointer;
+}

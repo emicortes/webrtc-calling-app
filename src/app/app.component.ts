@@ -33,4 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   ngOnInit() {}
+
+  signout() {
+    location.reload();
+  }
 }
