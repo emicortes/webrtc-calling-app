@@ -1,0 +1,4 @@
+<ng-container *ngIf="call.remoteStream">
+  <app-stream-player [stream]="call.remoteStream"></app-stream-player>
+</ng-container>
+<button (click)="endCall()">End call</button>

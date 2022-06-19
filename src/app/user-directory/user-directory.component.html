@@ -1,0 +1,13 @@
+<ng-container *ngIf="camera$ | async as cameraStream">
+  <ul *ngIf="users$ | async as users">
+    <li *ngFor="let user of users">
+      {{ user.name }} ({{ user.status }})
+      <button
+        *ngIf="user.status === 'Online'"
+        (click)="call(user, cameraStream)"
+      >
+        Call
+      </button>
+    </li>
+  </ul>
+</ng-container>
