@@ -19,6 +19,16 @@ export class CallService {
     ),
     camera: this.cameraService.camera$,
   }).pipe(
+    filter((resources) => {
+      const accept = confirm(`Call from ${resources.incomingOffer.from.name}`);
+      if(!accept) {
+        this.signalingService.send({
+          type: SdpMessageType.END_CALL,
+          target: resources.incomingOffer.from.id
+        });
+      }
+      return accept;
+    }),
     map((resources) => ({
       ...resources,
       call: new Call(
@@ -27,9 +37,7 @@ export class CallService {
         this.signalingService
       ),
     })),
-    tap((resources) =>
-      resources.call.offerReceived(resources.incomingOffer.sdp)
-    ),
+    tap((resources) => resources.call.acceptOffer(resources.incomingOffer.sdp)),
     map((resources) => resources.call),
     share()
   );
@@ -41,7 +49,13 @@ export class CallService {
     ),
     this.incomingCall$,
     this.endCall.asObservable().pipe(map(() => null))
-  ).pipe(tap((call) => this.usersService.updateStatus(call ? UserStatus.ON_CALL : UserStatus.ONLINE)));
+  ).pipe(
+    tap((call) =>
+      this.usersService.updateStatus(
+        call ? UserStatus.ON_CALL : UserStatus.ONLINE
+      )
+    )
+  );
 
   constructor(
     private signalingService: SignalingService,

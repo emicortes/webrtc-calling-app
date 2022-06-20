@@ -33,20 +33,22 @@ export enum SdpMessageType {
 export class Call {
   peerConnection: RTCPeerConnection;
   remoteStream?: MediaStream;
+
+  outgoing: boolean = false;
   /**
    *
    */
   constructor(
     private user: User,
-    camera: MediaStream,
+    media: MediaStream,
     private signaling: SignalingService
   ) {
     this.peerConnection = new RTCPeerConnection(environment.peerConfig);
 
     //setup local stream
-    camera
+    media
       .getTracks()
-      .forEach((track) => this.peerConnection.addTrack(track, camera));
+      .forEach((track) => this.peerConnection.addTrack(track, media));
 
     //setup remote stream
     this.peerConnection.ontrack = (event) => {
@@ -77,6 +79,7 @@ export class Call {
   }
 
   async sendCall() {
+    this.outgoing = true;
     const offer =
       (await this.peerConnection.createOffer()) as RTCSessionDescription;
     await this.peerConnection.setLocalDescription(offer);
@@ -88,7 +91,7 @@ export class Call {
     console.log('Offer sended');
   }
 
-  async offerReceived(offerSdp: RTCSessionDescriptionInit) {
+  async acceptOffer(offerSdp: RTCSessionDescriptionInit) {
     console.log('Offer received');
     await this.peerConnection.setRemoteDescription(offerSdp);
     const answer = await this.peerConnection.createAnswer();
