@@ -53,7 +53,9 @@ export class Call {
     //setup remote stream
     this.peerConnection.ontrack = (event) => {
       console.log('Track received');
+      //init the remote stream object
       this.remoteStream = this.remoteStream || new MediaStream();
+      //add each track received to the remote stream object
       event.streams[0].getTracks().forEach((track) => {
         this.remoteStream?.addTrack(track);
       });
@@ -64,6 +66,7 @@ export class Call {
     this.peerConnection.onicecandidate = (candidate) => {
       console.log('ICE candidate sended', candidate);
       if (candidate.candidate) {
+        //send the candidate through the signaling server
         this.signaling.send({
           target: this.user.id,
           type: SdpMessageType.NEW_ICE,
@@ -75,14 +78,18 @@ export class Call {
 
   async candidateReceived(candidate: RTCIceCandidateInit) {
     console.log('ICE candidate received');
+    // add the ICE candidate to the peer connection
     await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
   }
 
   async sendCall() {
     this.outgoing = true;
+    //create the offer
     const offer =
       (await this.peerConnection.createOffer()) as RTCSessionDescription;
+    //set the SDP offer as a local description of peer connection
     await this.peerConnection.setLocalDescription(offer);
+    //send the offer through the signaling server
     this.signaling.send({
       target: this.user.id,
       sdp: offer,
@@ -93,9 +100,13 @@ export class Call {
 
   async acceptOffer(offerSdp: RTCSessionDescriptionInit) {
     console.log('Offer received');
+    //set the received offer sdp as a remote description
     await this.peerConnection.setRemoteDescription(offerSdp);
+    //create the sdp answer
     const answer = await this.peerConnection.createAnswer();
+    //set the sdp answer as local description
     await this.peerConnection.setLocalDescription(answer);
+    //send sdp answer through signaling server
     this.signaling.send({
       target: this.user.id,
       sdp: answer,
@@ -105,6 +116,7 @@ export class Call {
   }
 
   async answerReceived(answerSdp: RTCSessionDescriptionInit) {
+    //just set the answer sdp as remote description
     await this.peerConnection.setRemoteDescription(answerSdp);
     console.log('Answer received');
   }

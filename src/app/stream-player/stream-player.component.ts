@@ -16,10 +16,13 @@ export class StreamPlayerComponent implements OnInit, AfterViewInit {
   videoContainer!: ElementRef;
   constructor() {}
   ngAfterViewInit(): void {
+    //set the stream as src of the video element
     this.videoContainer.nativeElement.srcObject = this.stream;
     if (this.muted) {
+      //mute the local stream, very important!
       this.videoContainer.nativeElement.muted = true;
     }
+    //play the video
     this.videoContainer.nativeElement.play();
   }
 
