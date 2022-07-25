@@ -7,10 +7,8 @@ import {
   startWith,
 } from 'rxjs';
 import { AuthService } from './auth.service';
-import { Call, SdpMessageType } from './call.models';
 import { CallService } from './call.service';
 import { CameraService } from './camera.service';
-import { SignalingService } from './signaling.service';
 
 @Component({
   selector: 'app-root',

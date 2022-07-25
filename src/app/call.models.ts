@@ -39,7 +39,7 @@ export class Call {
    *
    */
   constructor(
-    private user: User,
+    public user: User,
     media: MediaStream,
     private signaling: SignalingService
   ) {
@@ -122,13 +122,17 @@ export class Call {
   }
 
   receivedEndCall() {
+    // closing the peer connection
     this.peerConnection.close();
   }
 
   sendEndCall() {
+    // send the end call signal to the peer
     this.signaling.send({
       target: this.user.id,
       type: SdpMessageType.END_CALL,
     });
+    // closing the peer connection
+    this.peerConnection.close();
   }
 }
