@@ -6,4 +6,20 @@
   align-items: center;
   padding: 24px;
   box-sizing: border-box;
+
+
+  input[type=text] {
+    margin: 8px;
+    margin-top: 4px;
+  }
+
+  label {
+    margin-bottom: 8px;
+  }
+
+  form {
+    text-align: center;
+  }
+
+  
 }
