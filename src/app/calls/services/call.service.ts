@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, filter, map, merge, share, Subject, tap } from 'rxjs';
 import { Call, IncomingSdpMessage, SdpMessageType } from './call.models';
-import { CameraService } from './camera.service';
-import { SignalingService } from './signaling.service';
-import { UserStatus } from './users.models';
-import { UsersService } from './users.service';
+import { CameraService } from '../../video/services/camera.service';
+import { SignalingService } from '../../signaling/services/signaling.service';
+import { UserStatus } from '../../users/services/users.models';
+import { UsersService } from 'src/app/users/services/users.service';
 
 @Injectable({
   providedIn: 'root',

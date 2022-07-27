@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Call } from '../call.models';
-import { CallService } from '../call.service';
-import { CameraService } from '../camera.service';
-import { ComunicationsService } from '../comunications.service';
-import { SignalingService } from '../signaling.service';
-import { User } from '../users.models';
-import { UsersService } from '../users.service';
+import { Call } from '../../calls/services/call.models';
+import { CallService } from '../../calls/services/call.service';
+import { CameraService } from '../../video/services/camera.service';
+import { SignalingService } from '../../signaling/services/signaling.service';
+import { User } from '../services/users.models';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-user-directory',

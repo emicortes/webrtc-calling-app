@@ -1,6 +1,6 @@
-import { IncomingMessage, OutgoingMessage } from './comunications.models';
-import { User } from './users.models';
-import { SignalingService } from './signaling.service';
+import { IncomingMessage, OutgoingMessage } from 'src/app/comunications/services/comunications.models';
+import { SignalingService } from 'src/app/signaling/services/signaling.service';
+import { User } from 'src/app/users/services/users.models';
 import { environment } from 'src/environments/environment';
 
 export interface IncomingRTCMessage extends IncomingMessage {}
@@ -31,24 +31,28 @@ export enum SdpMessageType {
 }
 
 export class Call {
+  //native RTC peer connection
   peerConnection: RTCPeerConnection;
+
+  //remote stream that handles the tracks
   remoteStream?: MediaStream;
 
+  //indicates if it's an outgoing or incoming call
   outgoing: boolean = false;
-  /**
-   *
-   */
+  
   constructor(
     public user: User,
     media: MediaStream,
     private signaling: SignalingService
   ) {
+    // creating the peer connection with the peer config
     this.peerConnection = new RTCPeerConnection(environment.peerConfig);
 
     //setup local stream
     media
       .getTracks()
       .forEach((track) => this.peerConnection.addTrack(track, media));
+
 
     //setup remote stream
     this.peerConnection.ontrack = (event) => {

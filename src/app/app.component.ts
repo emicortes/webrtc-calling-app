@@ -6,9 +6,9 @@ import {
 import {
   startWith,
 } from 'rxjs';
-import { AuthService } from './auth.service';
-import { CallService } from './call.service';
-import { CameraService } from './camera.service';
+import { AuthService } from './auth/services/auth.service';
+import { CallService } from './calls/services/call.service';
+import { CameraService } from './video/services/camera.service';
 
 @Component({
   selector: 'app-root',

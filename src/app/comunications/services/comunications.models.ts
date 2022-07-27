@@ -1,4 +1,4 @@
-import { User } from "./users.models";
+import { User } from "../../users/services/users.models";
 
 export interface Message {
   type: string;

@@ -1,23 +1,51 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { filter, map, Subscription } from 'rxjs';
-import { Call, IncomingICEMessage, IncomingSdpMessage, SdpMessageType } from '../call.models';
-import { CallService } from '../call.service';
-import { SignalingService } from '../signaling.service';
+import {
+  Call,
+  IncomingICEMessage,
+  IncomingSdpMessage,
+  SdpMessageType,
+} from '../../calls/services/call.models';
+import { CallService } from '../services/call.service';
+import { SignalingService } from '../../signaling/services/signaling.service';
 
 @Component({
   selector: 'app-call',
   templateUrl: './call.component.html',
   styleUrls: ['./call.component.scss'],
 })
-export class CallComponent implements OnInit, OnDestroy {
+export class CallComponent implements OnInit, OnDestroy, OnChanges {
   @Input() call!: Call;
   signalingSubscription: any;
   subscriptions: Subscription[] = [];
 
-  constructor(private signalingService: SignalingService, private callService: CallService) {}
+  constructor(
+    private signalingService: SignalingService,
+    private callService: CallService
+  ) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['call'] && changes['call'].currentValue) {
+      this.call.peerConnection.onconnectionstatechange = () => {
+        switch (this.call.peerConnection.connectionState) {
+          case 'disconnected':
+          case 'closed':
+          case 'failed':
+            this.endCall();
+            break;
+        }
+      };
+    }
+  }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s=>s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   ngOnInit(): void {
@@ -38,9 +66,7 @@ export class CallComponent implements OnInit, OnDestroy {
           .subscribe((msg) => this.call.candidateReceived(msg.candidate)),
 
         this.signalingService.receive$
-          .pipe(
-            filter((msg) => msg.type == SdpMessageType.END_CALL),
-          )
+          .pipe(filter((msg) => msg.type == SdpMessageType.END_CALL))
           .subscribe((msg) => {
             this.call.receivedEndCall();
             this.callService.endCall.next(null);

@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, filter, map, Subject, tap } from 'rxjs';
+import { filter, map } from 'rxjs';
 import {
-  Call,
-  IncomingICEMessage,
   IncomingRTCMessage,
-  IncomingSdpMessage,
   OutgoingRTCMessage,
   SdpMessageType,
-} from './call.models';
-import { CameraService } from './camera.service';
-import { IncomingMessage } from './comunications.models';
-import { ComunicationsService } from './comunications.service';
+} from '../../calls/services/call.models';
+import { IncomingMessage } from '../../comunications/services/comunications.models';
+import { ComunicationsService } from '../../comunications/services/comunications.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SignalingService {
+  //receive signaling stream
   receive$ = this.comunicationsService.incomingMessage$.pipe(
+    //take only the recognized message types
     filter(
       (msg: IncomingMessage) =>
         msg.type === SdpMessageType.VIDEO_OFFER ||
@@ -24,6 +22,7 @@ export class SignalingService {
         msg.type === SdpMessageType.NEW_ICE ||
         msg.type === SdpMessageType.END_CALL
     ),
+    //cast the message as an RTC message to access sdp/ice info
     map((msg: IncomingMessage) => msg as IncomingRTCMessage)
   );
 
